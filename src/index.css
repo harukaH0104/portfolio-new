@@ -1,0 +1,60 @@
+/* ==========================================================================
+   1. Google Fonts から美しいフォントをインポート
+   ========================================================================== */
+/* 英語用 */
+@import url('https://fonts.googleapis.com/css2?family=Hepta+Slab:wght@1..900&display=swap');
+/* 日本語*/
+@import url('https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@300;400;500;700;900&display=swap');
+
+/* ==========================================================================
+   2. 全体共通のリセット ＆ ベーススタイル
+   ========================================================================== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  background-color: #FFF8E1;
+  /* 日本語明朝体をベースに設定 */
+  font-family: 'Zen Maru Gothic', "Hepta Slab";
+  color: #F49961; /* ユーザーの視覚的使いやすさに寄り添った墨黒 */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden; /* 横スクロール（画面崩れ）を完全に防止 */
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ==========================================================================
+   3. 特徴的なタイポグラフィ（文字ルール）
+   ========================================================================== */
+/* 英語のナビゲーションやタイトル用のクラス */
+.eng-text {
+  font-family: 'Hepta Slab', serif;
+  font-weight: 900;
+  letter-spacing: 0.15em; /* 文字間隔を広げて「時のゆとり」を表現 */
+  text-transform: uppercase; /* 自動的に大文字に変換 */
+}
+
+/* ==========================================================================
+   4. ユーザーの使いやすさに寄り添うUIパーツ（ボタン・リンク）
+   ========================================================================== */
+a, button {
+  cursor: pointer;
+  transition: all 0.3s ease; /* 動きの質感にラグジュアリーさを付与 */
+}
+
+/* スムーズな親指操作のためのスマホ対応（UX） */
+@media (max-width: 768px) {
+  a, button {
+    min-height: 44px; /* 押し間違いを防ぐタップ領域の確保 */
+  }
+}
