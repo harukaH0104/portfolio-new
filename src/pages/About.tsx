@@ -53,6 +53,7 @@ export const About: React.FC = () => {
                     }
                     .responsive-skill-img {
                         width: 100% !important;
+                        max-width: 267px !important;
                     }
                 }
             `}</style>
@@ -71,8 +72,8 @@ export const About: React.FC = () => {
                 <div className="responsive-about-row" style={styles.mainColumns}>
                     <div className="responsive-text-group" style={styles.profileTextGroup}>
                         <div style={styles.nameBlock}>
-                            <p style={styles.nameJapanese}>苗字　名前</p>
-                            <p style={styles.nameEnglish}>MYOZI NAMAE</p>
+                            <p style={styles.nameJapanese}>細野　春花</p>
+                            <p style={styles.nameEnglish}>HOSONO HARUKA</p>
                         </div>
                         <div style={styles.bioTextBlock}>
                             <p style={styles.bioText}>
@@ -163,7 +164,6 @@ export const About: React.FC = () => {
                                 >
                                     {/* 🌟 インポータントと同じ構成（中身はすべて真ん中揃え） */}
                                     <h3 style={styles.skillCardTitle}>{skill.title}</h3>
-                                    <p style={styles.skillCardSubtitle}>{skill.subtitle}</p>
                                     
                                     <img 
                                         src={skill.image} 
@@ -171,6 +171,8 @@ export const About: React.FC = () => {
                                         className="responsive-skill-img"
                                         style={styles.skillImage} 
                                     />
+
+                                    <p style={styles.skillCardSubtitle}>{skill.subtitle}</p>
                                     <p style={styles.cardDescription}>{skill.description}</p>
                                 </div>
                             );
@@ -187,7 +189,7 @@ const styles = {
     pageRoot: {
         width: '100%',
         maxWidth: '1200px',
-        margin: '150px auto 200px auto',
+        margin: '200px auto 200px auto',
         padding: '0 20px', 
         display: 'flex',
         flexDirection: 'column' as const,
@@ -231,9 +233,9 @@ const styles = {
     },
     nameEnglish: {
         fontFamily: 'Hepta Slab',
-        whiteSpace: 'nowrap' as const,
-        fontSize: '5cqw', 
-        fontWeight: 'bold',
+        //whiteSpace: 'nowrap' as const,
+        fontSize: '40px', 
+        fontWeight: '800',
         lineHeight: 1,
         letterSpacing: '0.05em',
         margin: 0,
@@ -296,7 +298,7 @@ const styles = {
         width: '100vw',
         marginLeft: 'calc(-50vw + 50%)',
         marginRight: 'calc(-50vw + 50%)',
-        marginTop: '150px',
+        marginTop: '300px',
         padding: '100px calc(50vw - 50%)',
          // 🌟中身だけ1200pxの内側にピシッと揃える計算式
         backgroundImage: `linear-gradient(to right, #C4E9F2 1px, transparent 1px)', 'linear-gradient(to bottom, #C4E9F2 1px, transparent 1px)`,
@@ -316,25 +318,26 @@ const styles = {
         flexDirection: 'row' as const,
         flexWrap: 'wrap' as const,
         justifyContent: 'center',
-         // 縦並び時に画面の真ん中に寄せる
-         gap: '40px 30px',
+        // 縦並び時に画面の真ん中に寄せる
+        gap: '40px 30px',
     },
         // 横550px、縦600px、角丸30px、縁（縁線）なし固定カード
     importantCard: {
         width: '550px',
         height: '600px',
         borderRadius: '30px',
-        padding: '50px 70px',
+        padding: '50px 50px',
         boxSizing: 'border-box' as const,
         display: 'flex',
         flexDirection: 'column' as const,
         gap: '20px',
+        justifyContent: 'center',
         alignItems: 'center' as const,// 🌟中身の文字や写真はすべて左寄せ
     },
     cardSubtitle: {
         fontSize: '14px',
         color: '#FFF8E1',
-        fontWeight: 'bold',
+        //fontWeight: 'bold',
         letterSpacing: '0.05em',
         margin: 0,
         textAlign: 'center' as const,
@@ -364,7 +367,7 @@ const styles = {
     // =========================================================// 🌟 SKILLS SECTION STYLES// =========================================================
     skillsSectionWrapper: {
         width: '100%',
-        marginTop: '150px',
+        marginTop: '300px',
         display: 'flex',
         flexDirection: 'column' as const,
     },
@@ -386,11 +389,12 @@ const styles = {
         width: '550px',
         height: '600px',
         borderRadius: '30px',
-        padding: '50px 80px',
+        padding: '50px 50px',
         boxSizing: 'border-box' as const,
         display: 'flex',
         flexDirection: 'column' as const,
         gap: '20px',
+        justifyContent: 'center',
         alignItems: 'center' as const, // 中身をすべて横方向の中央揃えにする
     },
     skillCardTitle: {

@@ -1,5 +1,6 @@
 import { HashRouter, Routes, Route } from 'react-router-dom';
 import { Header } from './components/Header';
+import { PageTopLink } from "./components/PageTopLink";
 import { Footer } from './components/Footer';
 import { Contact } from './components/Contact';
 import { ScrollToTop } from './ScrollToTop';
@@ -22,6 +23,7 @@ export function App() {
       }}>
         <ScrollToTop />
         <Header />
+        <PageTopLink />
         
         <main style={{ flex: 1 }}>
           <Routes>

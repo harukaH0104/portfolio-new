@@ -54,7 +54,7 @@ export const Home: React.FC = () => {
     return (
         <div style={styles.pageRoot}>
 
-<style>{`
+            <style>{`
                 @media (max-width: 768px) {
                     .responsive-work-card { width: 100% !important; max-width: 500px !important; }
                     .responsive-sub-photo-row {
@@ -123,7 +123,7 @@ export const Home: React.FC = () => {
                                 <div style={styles.categoryTag}>プロジェクト</div>
                                 <p style={styles.workTitle}>ホテル「uni」</p>
                             </div>
-                            <p style={styles.workRange}>design/coding</p>
+                            <p style={styles.workRange}>コンセプト設計 / ロゴデザイン / UI・UXデザイン / Reactコーディング</p>
                             <p style={styles.workDescription}>
                                 setumeisetumeisetumeisetumeisetumeisetumeisetumeisetumeisetumeisetumeisetumeisetumeisetumeisetumei
                                 setumeisetumeisetumeisetumeisetumeisetumeisetumei
@@ -216,8 +216,8 @@ export const Home: React.FC = () => {
                 </Link>
             </div>
                  
-                        {/* 4. ABOUT セクション（🌟画面の端から端まで余白なく横断するチェック柄） */}
-                        <div style={styles.aboutSectionWrapper}>
+            {/* 4. ABOUT セクション（🌟画面の端から端まで余白なく横断するチェック柄） */}
+            <div style={styles.aboutSectionWrapper}>
                 <div style={styles.aboutInnerContainer}>
                     
                     {/* タイトル：左端に配置 */}
@@ -270,7 +270,7 @@ const styles = {
     // --- HERO SECTION ---
     heroSection: {
         width: '100%',
-        padding: '100px 0 0 0',
+        marginTop: '200px',
         boxSizing: 'border-box' as const,
     },
     heroInner: {
@@ -430,7 +430,6 @@ const styles = {
     worksGridContainer: {
         width: '100%',
         display: 'flex',
-        //gridTemplateColumns: 'repeat(2, 1fr)',
         gap: '40px 30px',
         marginBottom: '60px',
         flexWrap: 'wrap' as const,
@@ -557,7 +556,7 @@ const styles = {
         marginRight: 'calc(-50vw + 50%)',// ⭕ 【最重要】画面の右端まで強制的に引っ張る計算式
         marginTop: '150px',
         marginBottom: '300px',
-        padding: '60px  0', 
+        padding: '60px  20px', 
         backgroundImage: `
             linear-gradient(to right, #C4E9F2 1px, transparent 1px),
             linear-gradient(to bottom, #C4E9F2 1px, transparent 1px)
@@ -570,7 +569,7 @@ const styles = {
         width: '100%',
         maxWidth: '1200px',
         margin: '0 auto',
-        padding: '0 20px', // スマホ用の安全マージン
+        //padding: '0 20px', // スマホ用の安全マージン
         boxSizing: 'border-box' as const,
         display: 'flex',
         flexDirection: 'column' as const,
@@ -601,14 +600,14 @@ const styles = {
         flexDirection: 'row' as const,
         justifyContent: 'center', // ⭕ 重複を削除し、縦に並んだ時も綺麗に「画面の真ん中」に置くルールに統一
         alignItems: 'center' as const,
-        gap: '100px',
+        gap: '30px',
         flexWrap: 'wrap' as const,
     },
     
     // 🌟 名前・説明文・ボタンを囲う「箱」（縦横500pxの完全固定サイズ）
     aboutTextBox: {
         width: '550px',              // ⭕ 横幅500px固定
-        height: '550px',             // ⭕ 縦幅500px固定
+        //height: '550px',             // ⭕ 縦幅500px固定
         backgroundColor: '#C4E9F2', 
         borderRadius: '30px',        
         padding: '50px',             
@@ -629,6 +628,7 @@ const styles = {
         fontWeight: '800',
         margin: 0,
         textAlign: 'left' as const, 
+        //whiteSpace: 'nowrap' as const,
     },
     introduce: {
         fontSize: '15px',
@@ -651,8 +651,12 @@ const styles = {
     // プロフィール画像本体（親枠いっぱいの完全な正円）
     profileImage: {
         width: '100%',
-        height: '100%',
+        maxWidth: '450px',
+        aspectRatio: '1 / 1',
+        display: 'flex',
+        justifyContent: 'center',
+        alignSelf: 'center' as const,
         borderRadius: '50%',
-        backgroundColor: '#e0e0e0',
+        backgroundColor: '#ffffff',
     },
 };

@@ -1,7 +1,7 @@
 export interface Work {
   id: number;
-  tag: string;
   title: string;
+  tag: string;
   range: string;
   outline: {
     client: string;
@@ -15,6 +15,21 @@ export interface Work {
     design_image: string;
     font: string;
   };
+  data: {
+    creationTime: string;
+    tool: string;
+  };
+  process: {
+    process1: string;
+    process2: string;
+    process3: string;
+  };
+  point: {
+    point1: string;
+    point2: string;
+    point3: string;
+  };
+  image: string;
   demoUrl: string;
   figmaUrl: string;
   githubUrl: string;
@@ -38,6 +53,21 @@ export const worksData: Work[] = [
       design_image: "a",
       font: "a",
     },
+    data: {
+      creationTime: "",
+      tool: "",
+    },
+    process: {
+      process1: "",
+      process2: "",
+      process3: "",
+    },
+    point: {
+      point1: "",
+      point2: "",
+      point3: "",
+    },
+    image: "",
     demoUrl: "https://vercel.app",
     figmaUrl: "#",
     githubUrl: "#"
@@ -59,6 +89,21 @@ export const worksData: Work[] = [
       design_image: "a",
       font: "a",
     },
+    data: {
+      creationTime: "",
+      tool: "",
+    },
+    process: {
+      process1: "",
+      process2: "",
+      process3: "",
+    },
+    point: {
+      point1: "",
+      point2: "",
+      point3: "",
+    },
+    image: "",
     demoUrl: "#",
     figmaUrl: "#",
     githubUrl: "#"
@@ -80,6 +125,21 @@ export const worksData: Work[] = [
       design_image: "a",
       font: "a",
     },
+    data: {
+      creationTime: "",
+      tool: "",
+    },
+    process: {
+      process1: "",
+      process2: "",
+      process3: "",
+    },
+    point: {
+      point1: "",
+      point2: "",
+      point3: "",
+    },
+    image: "",
     demoUrl: "#",
     figmaUrl: "#",
     githubUrl: "#"
@@ -101,6 +161,21 @@ export const worksData: Work[] = [
       design_image: "a",
       font: "a",
     },
+    data: {
+      creationTime: "",
+      tool: "",
+    },
+    process: {
+      process1: "",
+      process2: "",
+      process3: "",
+    },
+    point: {
+      point1: "",
+      point2: "",
+      point3: "",
+    },
+    image: "",
     demoUrl: "#",
     figmaUrl: "#",
     githubUrl: "#"
