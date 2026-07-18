@@ -5,8 +5,8 @@ export const About: React.FC = () => {
     return (
         <div style={styles.pageRoot}>
             {/* 🌟 メディアクエリを埋め込んで携帯サイズ（768px以下）時の挙動を100%安全に制御 */}
-                        {/* 🌟 携帯サイズ（768px以下）用のCSS指定に、スマホ時のみ発動するorderルールを追記 */}
-                        <style>{`
+            {/* 🌟 携帯サイズ（768px以下）用のCSS指定に、スマホ時のみ発動するorderルールを追記 */}
+            <style>{`
                 @media (max-width: 768px) {
                     /* すべての横並びを縦一列にする */
                     .responsive-about-row {

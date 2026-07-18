@@ -29,7 +29,7 @@ export interface Work {
     point2: string;
     point3: string;
   };
-  image: string;
+  mainImage: string;
   demoUrl: string;
   figmaUrl: string;
   githubUrl: string;
@@ -54,7 +54,43 @@ export const worksData: Work[] = [
       font: "a",
     },
     data: {
-      creationTime: "",
+      creationTime: "企画・設計　２週間　／　デザイン　２週間　／　コーディング　１ヶ月",
+      tool: "figma　／　vscode ",
+    },
+    process: {
+      process1: "",
+      process2: "",
+      process3: "",
+    },
+    point: {
+      point1: "",
+      point2: "",
+      point3: "",
+    },
+    mainImage: "",
+    demoUrl: "https://vercel.app",
+    figmaUrl: "#",
+    githubUrl: "#"
+  },
+  {
+    id: 2,
+    title: "CRAFT SAKE 碧（AO）",
+    tag: "プロジェクト",
+    range: "ブランドロゴ / ホームページデザイン / グラフィック展開",
+    outline: {
+      client: "ローカルクラフトサケ醸造所「碧（AO）」",
+      target: "20〜30代の働く女性（丁寧な暮らしを好む層）",
+      issue: "若者におじさん臭い日本酒だと思われてしまい価値が伝わらない課題",
+      purpose: "ナチュラルワインのような「洗練された温かみ」としてWebと紙で再構築する",
+      request: "若者が手に取りたくなるビジュアル展開、およびWebからリアルへの世界観の統一"
+    },
+    concept: {
+      main_concept: "暮らしに溶け込む、ひとくちの青。",
+      design_image: "a",
+      font: "a",
+    },
+    data: {
+      creationTime: "企画・設計　デザイン　コーディング",
       tool: "",
     },
     process: {
@@ -67,13 +103,13 @@ export const worksData: Work[] = [
       point2: "",
       point3: "",
     },
-    image: "",
-    demoUrl: "https://vercel.app",
+    mainImage: "",
+    demoUrl: "#",
     figmaUrl: "#",
     githubUrl: "#"
   },
   {
-    id: 2,
+    id: 3,
     title: "CRAFT SAKE 碧（AO）",
     tag: "プロジェクト",
     range: "ブランドロゴ / ホームページデザイン / グラフィック展開",
@@ -103,13 +139,13 @@ export const worksData: Work[] = [
       point2: "",
       point3: "",
     },
-    image: "",
+    mainImage: "",
     demoUrl: "#",
     figmaUrl: "#",
     githubUrl: "#"
   },
   {
-    id: 3,
+    id: 4,
     title: "PILATES CORE BALANCE",
     tag: "LP",
     range: "集客・ネット予約特化型ランディングページ［LP］",
@@ -139,13 +175,13 @@ export const worksData: Work[] = [
       point2: "",
       point3: "",
     },
-    image: "",
+    mainImage: "",
     demoUrl: "#",
     figmaUrl: "#",
     githubUrl: "#"
   },
   {
-    id: 4,
+    id: 5,
     title: "CAMPAIGN BANNER",
     tag: "バナー",
     range: "Instagram用 広告バナー・3パターン展開",
@@ -175,7 +211,7 @@ export const worksData: Work[] = [
       point2: "",
       point3: "",
     },
-    image: "",
+    mainImage: "",
     demoUrl: "#",
     figmaUrl: "#",
     githubUrl: "#"

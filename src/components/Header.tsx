@@ -145,7 +145,7 @@ const styles = {
         display: 'flex', 
         justifyContent: 'space-between', 
         alignItems: 'center' as const,
-        padding: '20px 40px',
+        padding: '20px 20px',
         boxSizing: 'border-box' as const,
         position: 'relative' as const,
     },
