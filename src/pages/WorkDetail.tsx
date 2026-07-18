@@ -43,19 +43,22 @@ export const WorkDetail: React.FC = () => {
                 
                 {/* 🌟 画面いっぱいに広がり、狭くなったら自動で切り取られるメイン画像 */}
                 {/* work.mainImage などの画像パスを src に指定してください */}
-                <img 
-                    src={work.mainImage || "https://placeholder.com"} 
-                    alt={work.title} 
-                    style={styles.heroImage} 
-                />
+                <div style={styles.imageContainer}>
+                    <img 
+                        src={work.mainImage || "https://placeholder.com"} 
+                        alt={work.title} 
+                        style={styles.heroImage} 
+                    />
+                </div>
 
                 {/* 🌟 既存のタイトル配置エリア（すでに実装されているもの） */}
                 {/* 透明な座布団として上に重ね、左上にタイトルを固定します */}
-                
-                <div style={styles.titleInnerBlock}>
-                    <p style={styles.tag}>{work.tag}</p>
-                    <h1 style={styles.workTitle}>{work.title}</h1>
-                    <p style={styles.range}>{work.range}</p>
+                <div style={styles.heroTitleOverlay}>
+                    <div style={styles.titleInnerBlock}>
+                        <p style={styles.tag}>{work.tag}</p>
+                        <h1 style={styles.workTitle}>{work.title}</h1>
+                        <p style={styles.range}>{work.range}</p>
+                    </div>
                 </div>
             </div>
 
@@ -240,7 +243,14 @@ const styles= {
         boxSizing: 'border-box' as const,
         marginBottom: '60px',
     },
-    
+    imageContainer: {
+        width: '100%',
+        height: '100%',
+        position: 'absolute' as const,
+        top: 0,
+        left: 0,
+        zIndex: 1, // ⭕ 文字（zIndex: 2）よりも後ろに配置
+    },
     // 🌟 【最重要】画面いっぱいに広がり、狭くなったら勝手に切り取られる画像の設定
     heroImage: {
         width: '100%',
@@ -262,7 +272,7 @@ const styles= {
         width: '100%',
         height: '100%',
         // 🌟 画像の上に文字が重なっても読めるように、ほんのり黒い薄い膜を敷く（不要なら background は消してOKです）
-        background: 'linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0) 50%)',
+        //background: 'linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0) 50%)',
         display: 'flex',
         justifyContent: 'center', // 横軸は1200pxラインに合わせるため中央へ
         alignItems: 'flex-start' as const,
