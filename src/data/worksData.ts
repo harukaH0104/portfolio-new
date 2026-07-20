@@ -12,8 +12,10 @@ export interface Work {
   };
   concept: {
     main_concept: string;
-    design_image: string;
-    font: string;
+    design_image?: string;
+    font?: string;
+    colors?: string[];
+    boardImage: string;
   };
   data: {
     creationTime: string;
@@ -29,7 +31,10 @@ export interface Work {
     point2: string;
     point3: string;
   };
-  mainImage: string;
+  image: {
+    mainImage: string;
+    subImage: string;
+  };
   demoUrl: string;
   figmaUrl: string;
   githubUrl: string;
@@ -42,32 +47,37 @@ export const worksData: Work[] = [
     tag: "プロジェクト",
     range: "コンセプト設計 / ロゴデザイン / UI・UXデザイン / Reactコーディング",
     outline: {
-      client: "架空リゾートホテル「uni」（沖縄県宮古島市）",
-      target: "30〜50代の都内在住のパワーカップル",
-      issue: "オーナーの要望に対し、Webサイトの立ち上げを提案",
-      purpose: "デジタル上でホテルの圧倒的な「静寂」を疑似体験させ、直接予約へ繋げる",
-      request: "白を基調とした洗練されたラグジュアリー感、およびスマホでのスムーズな操作性の確保"
+        client: "架空リゾートホテル「uni」（沖縄県宮古島市）",
+        target: "30〜50代の都内在住のパワーカップル",
+        issue: "オーナーの要望に対し、Webサイトの立ち上げを提案",
+        purpose: "デジタル上でホテルの圧倒的な「静寂」を疑似体験させ、直接予約へ繋げる",
+        request: "白を基調とした洗練されたラグジュアリー感、およびスマホでのスムーズな操作性の確保"
     },
     concept: {
-      main_concept: "余白と、静寂と。自分本来の純度に戻る旅",
-      design_image: "a",
-      font: "a",
+        main_concept: "余白と、静寂と。自分本来の純度に戻る旅",
+        design_image: "a",
+        font: "Hepta Slab / Zen maru Gothic",
+        colors: ["#4599C4", "#F49961", "#FFF8E1", "#4E4E4E"] ,
+        boardImage: "",
     },
     data: {
-      creationTime: "企画・設計　２週間　／　デザイン　２週間　／　コーディング　１ヶ月",
-      tool: "figma　／　vscode ",
+        creationTime: "企画・設計　２週間　／　デザイン　２週間　／　コーディング　１ヶ月",
+        tool: "figma　／　vscode ",
     },
     process: {
-      process1: "",
-      process2: "",
-      process3: "",
+        process1: "",
+        process2: "",
+        process3: "",
     },
     point: {
-      point1: "",
-      point2: "",
-      point3: "",
+        point1: "",
+        point2: "",
+        point3: "",
     },
-    mainImage: "",
+    image: {
+        mainImage: "",
+        subImage: "",
+    },
     demoUrl: "https://vercel.app",
     figmaUrl: "#",
     githubUrl: "#"
@@ -78,32 +88,36 @@ export const worksData: Work[] = [
     tag: "プロジェクト",
     range: "ブランドロゴ / ホームページデザイン / グラフィック展開",
     outline: {
-      client: "ローカルクラフトサケ醸造所「碧（AO）」",
-      target: "20〜30代の働く女性（丁寧な暮らしを好む層）",
-      issue: "若者におじさん臭い日本酒だと思われてしまい価値が伝わらない課題",
-      purpose: "ナチュラルワインのような「洗練された温かみ」としてWebと紙で再構築する",
-      request: "若者が手に取りたくなるビジュアル展開、およびWebからリアルへの世界観の統一"
+        client: "ローカルクラフトサケ醸造所「碧（AO）」",
+        target: "20〜30代の働く女性（丁寧な暮らしを好む層）",
+        issue: "若者におじさん臭い日本酒だと思われてしまい価値が伝わらない課題",
+        purpose: "ナチュラルワインのような「洗練された温かみ」としてWebと紙で再構築する",
+        request: "若者が手に取りたくなるビジュアル展開、およびWebからリアルへの世界観の統一"
     },
     concept: {
-      main_concept: "暮らしに溶け込む、ひとくちの青。",
-      design_image: "a",
-      font: "a",
+        main_concept: "暮らしに溶け込む、ひとくちの青。",
+        design_image: "a",
+        font: "a",
+        boardImage: "",
     },
     data: {
-      creationTime: "企画・設計　デザイン　コーディング",
-      tool: "",
+        creationTime: "企画・設計　デザイン　コーディング",
+        tool: "",
     },
     process: {
-      process1: "",
-      process2: "",
-      process3: "",
+        process1: "",
+        process2: "",
+        process3: "",
     },
     point: {
-      point1: "",
-      point2: "",
-      point3: "",
+        point1: "",
+        point2: "",
+        point3: "",
     },
-    mainImage: "",
+    image: {
+        mainImage: "",
+        subImage: "",
+    },
     demoUrl: "#",
     figmaUrl: "#",
     githubUrl: "#"
@@ -124,6 +138,7 @@ export const worksData: Work[] = [
       main_concept: "暮らしに溶け込む、ひとくちの青。",
       design_image: "a",
       font: "a",
+      boardImage: "",
     },
     data: {
       creationTime: "",
@@ -139,7 +154,10 @@ export const worksData: Work[] = [
       point2: "",
       point3: "",
     },
-    mainImage: "",
+    image: {
+        mainImage: "",
+        subImage: "",
+    },
     demoUrl: "#",
     figmaUrl: "#",
     githubUrl: "#"
@@ -160,6 +178,7 @@ export const worksData: Work[] = [
       main_concept: "芯から、美しく、歩き出す。一生モノの体幹をあなたに。",
       design_image: "a",
       font: "a",
+      boardImage: "",
     },
     data: {
       creationTime: "",
@@ -175,7 +194,10 @@ export const worksData: Work[] = [
       point2: "",
       point3: "",
     },
-    mainImage: "",
+    image: {
+        mainImage: "",
+        subImage: "",
+    },
     demoUrl: "#",
     figmaUrl: "#",
     githubUrl: "#"
@@ -196,6 +218,7 @@ export const worksData: Work[] = [
       main_concept: "1つのキャンペーンに対し、ターゲットの心理に合わせた3つのアプローチを検証する",
       design_image: "a",
       font: "a",
+      boardImage: "",
     },
     data: {
       creationTime: "",
@@ -211,7 +234,10 @@ export const worksData: Work[] = [
       point2: "",
       point3: "",
     },
-    mainImage: "",
+    image: {
+        mainImage: "",
+        subImage: "",
+    },
     demoUrl: "#",
     figmaUrl: "#",
     githubUrl: "#"

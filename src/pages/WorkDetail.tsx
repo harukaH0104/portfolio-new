@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { worksData } from '../data/worksData';
 
 export const WorkDetail: React.FC = () => {
+    const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
     // URLの末尾（/works/1 なら "1"）を取得
     const { id } = useParams<{ id: string }>();
   
@@ -35,6 +36,46 @@ export const WorkDetail: React.FC = () => {
                         max-width: 500px !important; /* 広がりすぎないようにABOUTの箱等とサイズを統一 */
                         align-self: center !important;
                     }
+                    /* 🌟 修正：携帯サイズになったら枠ごと画像の高さに合わせて自動縮小させます */
+                    .responsive-sub-hero {
+                        /* ⭕ absoluteの箱を消したため、height: auto にするだけで、
+                           中の画像の縮小スピードと100%完全に同期して、外側の高さも綺麗に縮みます */
+                        height: auto !important;
+                        min-height: 300px !important; /* 安全用 */
+                        
+                        /* 画面いっぱいの横断（100vw）をスマホ時も維持するための指定 */
+                        width: 100vw !important;
+                        margin-left: calc(-50vw + 50%) !important;
+                        margin-right: calc(-50vw + 50%) !important;
+                    }
+                    
+                    /* スマホ時の画像自体のサイズ制限を解除し、画面幅ぴったりに合わせます */
+                    .responsive-sub-hero img {
+                        width: 100% !important;
+                        height: auto !important;
+                        max-height: none !important;
+                    }
+                    .hover-tooltip:hover span,
+                    .hover-tooltip:active span {
+                        opacity: 1 !important;
+                        visibility: visible !important;
+                        transform: translateX(-50%) translateY(0) !important;
+                    }
+
+                    .hover-tooltip span {
+                        transform: translateX(-50%) translateY(5px);
+                    }
+
+                    /* 🌟 追加：携帯サイズになったら左右の2分割を解除して「縦並び」にする */
+                    .responsive-concept-split {
+                        flex-direction: column !important;
+                        gap: 50px !important; /* スマホ時の左側（テキスト）と右側（画像）の間の縦の隙間 */
+                    }
+                    /* スマホ時は半々（50%）の制限を完全に解除し、画面幅100%に広げて縦に積み重ねます */
+                    .responsive-concept-split > div {
+                        flex: 1 1 100% !important;
+                        max-width: 100% !important;
+                    }
                 }
             `}</style>
 
@@ -45,7 +86,7 @@ export const WorkDetail: React.FC = () => {
                 {/* work.mainImage などの画像パスを src に指定してください */}
                 <div style={styles.imageContainer}>
                     <img 
-                        src={work.mainImage || "https://placeholder.com"} 
+                        src={work.image.mainImage || "https://placeholder.com"} 
                         alt={work.title} 
                         style={styles.heroImage} 
                     />
@@ -83,12 +124,33 @@ export const WorkDetail: React.FC = () => {
                 </div>
             </div>
 
+            {/* 🌟 クラス名を付与。外枠の inline-style（subHeroWrapper）がスマホ時の邪魔をしないようにします */}
+            <div className="responsive-sub-hero" style={styles.subHeroWrapper}>
+                {/* 🌟 修正：SafariやChromeで高さが0に潰れる原因となる imageContainer（absoluteの箱）を完全に撤去しました */}
+                <img 
+                    src={work.image.subImage || "https://placeholder.com"} 
+                    alt={work.title} 
+                    style={styles.subImage} 
+                />
+            </div>
+
+
+
             {/* Outline セクション */}
             <div style={styles.sectionContainer}>
+                {/* 1. タイトルエリア：右横にすーっと細い棒が伸びる仕様に変更 */}
                 <div style={styles.sectionTitleContainer}>
                     <p style={styles.sectionSubtitle}>制作概要</p>
-                    <h2 style={styles.sectionTitle}>OUTLINE</h2>
+                    
+                    {/* 🌟 修正：文字と直線を綺麗に「横並び＆上下中央」でドッキングさせます */}
+                    <div style={styles.titleWithLineFlex}>
+                        <h2 style={styles.sectionTitle}>OUTLINE</h2>
+                        
+                        {/* 🌟 追加：これが右横に気持ちよく伸びる「細い棒（直線）」の本体です */}
+                        <div style={styles.titleFlexLine} />
+                    </div>
                 </div>
+
                 {/* 🌟 縦積みのグループコンテナ */}
                 <div style={styles.outlineContainer}>
                     
@@ -141,53 +203,123 @@ export const WorkDetail: React.FC = () => {
             <div style={styles.sectionContainer}>
                 <div style={styles.sectionTitleContainer}>
                     <p style={styles.sectionSubtitle}>コンセプト</p>
-                    <h2 style={styles.sectionTitle}>CONCEPT</h2>
+                    
+                    {/* 🌟 修正：文字と直線を綺麗に「横並び＆上下中央」でドッキングさせます */}
+                    <div style={styles.titleWithLineFlex}>
+                        <h2 style={styles.sectionTitle}>CONCEPT</h2>
+                        
+                        {/* 🌟 追加：これが右横に気持ちよく伸びる「細い棒（直線）」の本体です */}
+                        <div style={styles.titleFlexLine} />
+                    </div>
                 </div>
-                            {/* 🌟 縦積みのグループコンテナ */}
-                <div style={styles.outlineContainer}>
-                    
-                    {/* 1. クライアント：データが存在し、空文字ではない時だけ表示 */}
-                    {work.outline.client && work.outline.client !== "" && (
-                        <div style={styles.outlineGroup}>
-                            <h4 style={styles.outlineTitle}>コンセプト</h4>
-                            <p style={styles.outlineContent}>{work.concept.main_concept}</p>
-                        </div>
-                    )}
-                    
-                    {/* 2. ターゲット：データが存在し、空文字ではない時だけ表示 */}
-                    {work.outline.target && work.outline.target !== "" && (
-                        <div style={styles.outlineGroup}>
-                            <h4 style={styles.outlineTitle}>デザインイメージ</h4>
-                            <p style={styles.outlineContent}>{work.concept.design_image}</p>
-                        </div>
-                    )}
+                
+                <div className="responsive-concept-split" style={styles.conceptFlexWrapper}>
+                    {/* 🌟 縦積みのグループコンテナ */}
+                    <div style={styles.outlineContainer}>
+                        
+                        {/* 1. クライアント：データが存在し、空文字ではない時だけ表示 */}
+                        {work.outline.client && work.outline.client !== "" && (
+                            <div style={styles.outlineGroup}>
+                                <h4 style={styles.outlineTitle}>コンセプト</h4>
+                                <p style={styles.outlineContent}>{work.concept.main_concept}</p>
+                            </div>
+                        )}
+                        
+                        {/* 2. ターゲット：データが存在し、空文字ではない時だけ表示 */}
+                        {work.outline.target && work.outline.target !== "" && (
+                            <div style={styles.outlineGroup}>
+                                <h4 style={styles.outlineTitle}>デザインイメージ</h4>
+                                <p style={styles.outlineContent}>{work.concept.design_image}</p>
+                            </div>
+                        )}
 
-                    {/* 3. 課題：データが存在し、空文字ではない時だけ表示 */}
-                    {work.outline.issue && work.outline.issue !== "" && (
-                        <div style={styles.outlineGroup}>
-                            <h4 style={styles.outlineTitle}>フォント</h4>
-                            <p style={styles.outlineContent}>{work.concept.font}</p>
-                        </div>
-                    )}
+                        {/* 🌟 フォント：データが存在し、空文字ではない時だけグループごと表示 */}
+                        {work.concept.font && work.concept.font !== "" && (
+                            <div style={styles.outlineGroup}>
+                                <h4 style={styles.outlineTitle}>フォント</h4>
+                                
+                                {/* 🌟 複数フォントがある場合に、上から下へ綺麗に縦積みするコンテナ */}
+                                <div style={styles.fontColumnWrapper}>
+                                    {/* 💡 スラッシュ（/）で区切られたフォント名を1つずつに分解してループ処理します */}
+                                    {work.concept.font.split('/').map((rawFont, index) => {
+                                        const fontName = rawFont.trim(); // 前後の不要なスペースを削るお守り
+                                        
+                                        // 💡 日本語フォントか英語フォントかで、プレビューする短文を自動で切り替える賢い処理
+                                        // フォント名に「Noto」「Mincho」「Gothic」「明朝」などが含まれていたら日本語にします
+                                        const isJapanese = /Noto|Sans|Gothic|Mincho|明朝|ゴシック|ヒラギノ/i.test(fontName);
+                                        const previewText = isJapanese ? "デザイン" : "The quick fox";
 
-                    {/* 4. 目的：データが存在し、空文字ではない時だけ表示 */}
-                    {work.outline.purpose && work.outline.purpose !== "" && (
+                                        return (
+                                            <div key={index} style={styles.fontTagCard}>
+                                                {/* 🌟 左側：文字サイズを大きく確保した、フォントの個性が一目でわかる短文プレビュー */}
+                                                <span style={{ ...styles.fontPreviewText, fontFamily: fontName }}>
+                                                    {previewText}
+                                                </span>
+                                                
+                                                {/* 🌟 右側：フォント名（少し控えめに配置してプレビューを引き立たせます） */}
+                                                <span style={styles.fontNameText}>{fontName}</span>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                        )}
+
+
+
+                        {/* 4. 目的：データが存在し、空文字ではない時だけ表示 */}
+                        {work.concept.colors && work.concept.colors.length > 0 && (
                         <div style={styles.outlineGroup}>
                             <h4 style={styles.outlineTitle}>カラー</h4>
-                            <p style={styles.outlineContent}>{work.outline.purpose}</p>
+                            <div style={styles.colorRowWrapper}>
+                                {work.concept.colors.map((color, index) => (
+                                    <div 
+                                        key={index}
+                                        className="hover-tooltip"
+                                        style={{
+                                            ...styles.colorSquareCard,
+                                            backgroundColor: color,
+                                        }}
+                                    >
+                                        <span style={styles.tooltipText}>{color}</span>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
-                    )}
+                        )}
 
+                    </div>
+
+                    {/* 👉 右側：【新設】コンセプトボード欄（アスペクト比を保ったまま綺麗に収まります） */}
+                    <div style={styles.boardContainer}>
+                        <h4 style={styles.outlineTitle}>コンセプトボード</h4>
+                        <div style={styles.boardImageFrame}>
+                            <img 
+                                src={work.concept.boardImage || "https://placeholder.com"} 
+                                alt="Concept Board" 
+                                style={styles.boardImage} 
+                            />
+                        </div>
+                    </div>
+                    
                 </div>
-
             </div>
 
             {/* data セクション */}
             <div style={styles.sectionContainer}>
+                {/* 1. タイトルエリア：右横にすーっと細い棒が伸びる仕様に変更 */}
                 <div style={styles.sectionTitleContainer}>
                     <p style={styles.sectionSubtitle}>制作データ</p>
-                    <h2 style={styles.sectionTitle}>DATA</h2>
+                    
+                    {/* 🌟 修正：文字と直線を綺麗に「横並び＆上下中央」でドッキングさせます */}
+                    <div style={styles.titleWithLineFlex}>
+                        <h2 style={styles.sectionTitle}>DATA</h2>
+                        
+                        {/* 🌟 追加：これが右横に気持ちよく伸びる「細い棒（直線）」の本体です */}
+                        <div style={styles.titleFlexLine} />
+                    </div>
                 </div>
+
                             {/* 🌟 縦積みのグループコンテナ */}
                 <div style={styles.outlineContainer}>
 
@@ -226,10 +358,14 @@ const styles= {
         width: '100%',
         display: 'flex',
         flexDirection: 'column' as const,
-        overflowX: 'hidden' as const,
-        padding: '0 20px',               // ⭕ 全体に強制適用する左右の安全余白
-        boxSizing: 'border-box' as const,  // ⭕ 余白を含めて100%幅を計算させ、ハミ出しを防止
+        
+        // ❌ Chromeの表示・ホバー計算を強制遮断する原因のため、この1行を削除
+        // overflowX: 'hidden' as const, 
+        
+        padding: '0 20px',               
+        boxSizing: 'border-box' as const,  
     },
+
 
     // 🌟 画面いっぱいのヒーローエリアの土台（高さはパソコン時で 600px 前後がおすすめ）
     detailHeroWrapper: {
@@ -238,10 +374,9 @@ const styles= {
         width: '100vw',
         marginLeft: 'calc(-50vw + 50%)',
         marginRight: 'calc(-50vw + 50%)',
-        height: '600px', // ⭕ 画像を表示させたい縦幅（お好みで 500px や 70vh などに変更可）
+        height: '800px', // ⭕ 画像を表示させたい縦幅（お好みで 500px や 70vh などに変更可）
         overflow: 'hidden' as const,
         boxSizing: 'border-box' as const,
-        marginBottom: '60px',
     },
     imageContainer: {
         width: '100%',
@@ -273,6 +408,7 @@ const styles= {
         height: '100%',
         // 🌟 画像の上に文字が重なっても読めるように、ほんのり黒い薄い膜を敷く（不要なら background は消してOKです）
         //background: 'linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0) 50%)',
+        backgroundColor: '#ffffff',
         display: 'flex',
         justifyContent: 'center', // 横軸は1200pxラインに合わせるため中央へ
         alignItems: 'flex-start' as const,
@@ -295,7 +431,6 @@ const styles= {
         fontFamily: 'Hepta Slab',
         fontSize: 'clamp(32px, 5vw, 56px)', // スマホで勝手に小さくなる可変文字
         fontWeight: '900',
-        //color: '#ffffff',
         margin: '10px 0 0 0',
         letterSpacing: '0.05em',
     },
@@ -309,14 +444,6 @@ const styles= {
         flexShrink: 0, // 🌟追加：画面が狭くなってもタグ自体が潰れて小さくならないように固定
     },
     range: {},
-    sectionContainer: {
-        width: '100%',
-        maxWidth: '1200px',
-        margin: '100px auto 100px auto',
-        display: 'flex',
-        flexDirection: 'column' as const,
-        boxSizing: 'border-box' as const,
-    },
     herosectionContainer: {
         width: '100%',
         maxWidth: '1200px',
@@ -328,7 +455,7 @@ const styles= {
     descriptionContainer: {
         width: '100%',
         maxWidth: '1200px',
-        margin: '50px auto 50px auto',
+        margin: '100px auto',
         display: 'flex',
         flexDirection: 'row' as const,
         
@@ -382,7 +509,83 @@ const styles= {
         margin: '0 0 5px 0',
         textAlign: 'center' as const,
     },
-    sectionTitleContainer: {},
+    subHeroWrapper: {
+        position: 'relative' as const,
+        width: '100vw',
+        marginLeft: 'calc(-50vw + 50%)',
+        marginRight: 'calc(-50vw + 50%)',
+        height: '500px', // PC時は500px固定
+        overflow: 'hidden' as const,
+        boxSizing: 'border-box' as const,
+        backgroundColor: '#ffffff',
+        // 🌟 追加：中の画像を上下左右のど真ん中に配置する設定
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    // 🌟 修正：100%全体を縮小させ、スマホ時に高さが潰れるのを防ぐ写真ルール
+    subImage: {
+        // ⭕ 修正：親の500pxの枠に対して、縦横比を崩さず最大サイズで収まるように設定
+        maxWidth: '100%',
+        maxHeight: '100%',
+        width: 'auto',
+        height: 'auto',
+        objectFit: 'contain' as const,
+        boxSizing: 'border-box' as const,
+    },
+    sectionContainer: {
+        width: '100%',
+        maxWidth: '1200px',
+        margin: '100px auto 100px auto',
+        display: 'flex',
+        flexDirection: 'column' as const,
+        boxSizing: 'border-box' as const,
+    },
+    
+    // 🌟 新設：左右を分割するFlexbox横並びレール
+    conceptFlexWrapper: {
+        display: 'flex',
+        flexDirection: 'row' as const,
+        justifyContent: 'space-between',
+        alignItems: 'flex-start' as const, // 上端でピシッと高さを揃える
+        gap: '60px',                      // 左右のエリアの間のほどよい隙間
+        width: '100%',
+        margin: '20px 0',
+        boxSizing: 'border-box' as const,
+    },
+    
+    // タイトルセクション全体の囲み（元の設定を維持、あるいは上下の余白を調整）
+    sectionTitleContainer: {
+        width: '100%',
+        marginBottom: '30px', // コンセプトのコンテンツとの間の心地よい隙間
+        display: 'flex',
+        flexDirection: 'column' as const,
+        alignItems: 'flex-start' as const,
+    },
+    
+    // 🌟 新設：タイトル文字と右横の直線を綺麗にドッキングさせるFlexコンテナ
+    titleWithLineFlex: {
+        display: 'flex',
+        flexDirection: 'row' as const,
+        alignItems: 'center' as const, // ⭕ 文字の縦の中心と、棒の縦の中心をピシッと一直線に揃える指示
+        width: '100%',                 // 横幅を100%いっぱいに広げる
+        gap: '24px',                   // 🌟 CONCEPT という文字と、棒のスタート位置の間の心地よい隙間
+    },
+    // 🌟 新設：右横にすーっと伸びる細い直線のデザインルール
+    titleFlexLine: {
+        // ⭕【ここが最大の仕掛け！】
+        // 文字が使った残りの横幅のスペースを「100%すべて使い切って右端まで自動で伸びなさい」という命令
+        flex: 1, 
+        
+        // ⭕ 線の太さ（1px にすると繊細でプロっぽい洗練された空気感が出ます。1.5px や 2px に太くしてもOKです）
+        height: '1px', 
+        
+        // ⭕ 線のカラー（あなたのブランドカラーのオレンジに指定。#4599C4の水色にしても非常に映えます）
+        backgroundColor: '#4599C4', 
+        
+        borderRadius: '1px', // 念のため端を滑らかにするお守り
+        opacity: 0.8,        // ほんのり透けさせて上品に（不要なら削除して100%くっきりでOKです）
+    },
     sectionTitle: {
         fontFamily: 'Hepta Slab',
         fontSize: '48px', 
@@ -393,20 +596,46 @@ const styles= {
         letterSpacing: '0.1em', 
         color: '#4599C4' 
     },
-    // 全体を包むコンテナ
+    // 🌟 修正：左側テキストエリア（PC時は全体の50%から隙間の半分を引いたサイズに固定）
     outlineContainer: {
+        flex: '0 0 calc(50% - 30px)',
         width: '100%',
         display: 'flex',
         flexDirection: 'column' as const,
-        margin: '20px 0',
-        gap: '40px', // グループ（行）とグループの間の隙間
+        gap: '40px', 
+        boxSizing: 'border-box' as const,
     },
-    // 🌟 1つのタイトルと内容をまとめる縦積みのグループ
+    
+    // 🌟 新設：右側コンセプトボードエリア（左側と完璧に1:1の横幅を死守）
+    boardContainer: {
+        flex: '0 0 calc(50% - 30px)',
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column' as const,
+        gap: '6px', // 「コンセプトボード」というタイトルと画像枠の間の隙間
+        boxSizing: 'border-box' as const,
+    },
+    // ボード画像を包むおしゃれな枠（デザインはお好みで調整してください）
+    boardImageFrame: {
+        width: '100%',
+        borderRadius: '12px',
+        overflow: 'hidden' as const,
+        boxShadow: '0 4px 20px rgba(0,0,0,0.05), inset 0 0 0 1px rgba(0,0,0,0.08)',
+        backgroundColor: '#ffffff',
+        marginTop: '4px',
+    },
+    // ボード画像自体：絶対に形を崩さず（トリミングせず）100%縮小表示するcontain仕様
+    boardImage: {
+        width: '100%',
+        height: 'auto',
+        display: 'block' as const,
+    },
+    // 1つのタイトルと内容をまとめるグループ（既存を維持）
     outlineGroup: {
         display: 'flex',
-        flexDirection: 'column' as const, // ⭕ 横並びではなく「上から下への縦積み」に指定
-        alignItems: 'flex-start' as const, // 中身をすべて左寄せ
-        gap: '6px',                       // タイトルと説明文の間の細かな隙間
+        flexDirection: 'column' as const, 
+        alignItems: 'flex-start' as const, 
+        gap: '6px',                       
         width: '100%',
     },
     // 🌟 タイトル単体のスタイル
@@ -431,6 +660,87 @@ const styles= {
         color: '#4E4E4E',
         margin: 0,
         textAlign: 'left' as const, // 確実に左寄せ
+    },
+    // 🌟 追加：フォントタグを綺麗に配置するコンテナ（スマホ時は自動で折り返します）
+    fontColumnWrapper: {
+        display: 'flex',
+        flexDirection: 'column' as const, // ⭕ 縦並び（縦積み）を指定
+        gap: '10px',                     // カードとカードの間の縦の隙間
+        width: '100%',
+        marginTop: '4px',
+        boxSizing: 'border-box' as const,
+    },
+    fontTagCard: {
+        display: 'flex',
+        flexDirection: 'column' as const, // ⭕ カードの内部も「上が短文、下がフォント名」の美しい縦並びに
+        alignItems: 'flex-start' as const, // すべて左寄せ
+        justifyContent: 'center',
+        width: '100%',
+        maxWidth: '500px',                // 画面幅が広いPC時も広がりすぎない安心の最大幅
+        backgroundColor: '#ffffff',       // クリーンな白背景
+        padding: '16px 20px',             // 上下左右にしっかり余白を取って高級感を演出
+        borderRadius: '12px',             // 今っぽい少し丸みのある角丸
+        // 薄い色が背景に溶けないための繊細な輪郭線とごくわずかなシャドウ
+        boxShadow: 'inset 0 0 0 1px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.02)', 
+        boxSizing: 'border-box' as const,
+        gap: '6px',                       // 短文とフォント名の間の細かな隙間
+    },
+    fontPreviewText: {
+        fontSize: '22px',                 // ⭕ 小さくて見えない問題を解決する特大サイズ
+        fontWeight: 'normal',
+        color: '#4599C4',                 // あなたのブランドの水色（お好みで#4E4E4Eなどの文字色にしても映えます）
+        margin: 0,
+        lineHeight: '1.2',
+        width: '100%',
+        whiteSpace: 'nowrap' as const,    // 途中で不自然に改行されるのを防止
+        overflow: 'hidden' as const,
+        textOverflow: 'ellipsis' as const, // 万が一スマホ幅で溢れたら末尾を「...」にする安全弁
+    },
+    fontNameText: {
+        fontFamily: 'Hepta Slab, sans-serif',
+        fontSize: '12px',                 // プレビューを引き立てるために一回り繊細なフォントサイズに
+        fontWeight: 'bold',
+        color: '#A0A0A0',                 // 主張しすぎない上品なライトグレー
+        margin: 0,
+        letterSpacing: '0.05em',
+    },
+    colorRowWrapper: {
+        display: 'flex',
+        flexDirection: 'row' as const,
+        flexWrap: 'nowrap' as const,    
+        justifyContent: 'flex-start',   
+        gap: '10px',                    
+        width: '100%',
+        marginTop: '4px',               
+        boxSizing: 'border-box' as const,
+        transform: 'translateZ(0)', 
+    },
+    colorSquareCard: {
+        width: '45px',                  
+        aspectRatio: '1 / 1',           
+        borderRadius: '6px',            
+        boxShadow: 'inset 0 0 0 1px rgba(0,0,0,0.08)', 
+        flexShrink: 1,                  
+        minWidth: '10px',               
+        boxSizing: 'border-box' as const,
+        position: 'relative' as const, 
+    },
+    tooltipText: {
+        position: 'absolute' as const,
+        bottom: '125%',               
+        left: '50%',
+        transform: 'translateX(-50%)', 
+        backgroundColor: '#333333',   
+        color: '#ffffff',             
+        fontSize: '11px',             
+        fontFamily: 'Hepta Slab',
+        padding: '5px 8px',           
+        borderRadius: '4px',          
+        whiteSpace: 'nowrap' as const,
+        zIndex: 10,                   
+        opacity: 0,
+        visibility: 'hidden' as const,
+        transition: 'opacity 0.2s ease, transform 0.2s ease', 
     },
     demoLink: {
         width: '300px',
