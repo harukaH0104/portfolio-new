@@ -10,6 +10,12 @@ export const WorkDetail: React.FC = () => {
     // データの中から、IDが一致する作品を1つ検索
     const work = worksData.find((w) => w.id === Number(id));
 
+    // 💡 現在の作品データ（work）のIDをもとに、1つ前と1つ後のデータを自動で検索します
+    const currentId = Number(work.id);
+    const prevWork = worksData.find(w => w.id === currentId - 1);
+    const nextWork = worksData.find(w => w.id === currentId + 1);
+
+
     // もしデータが見つからない場合の不具合防止（白紙画面になるのを防ぐお守り）
     if (!work) {
         return (
@@ -76,6 +82,58 @@ export const WorkDetail: React.FC = () => {
                         flex: 1 1 100% !important;
                         max-width: 100% !important;
                     }
+                    /* 🌟 統合：携帯サイズになったらすべてのジグザグ行を一律で「通常の縦積み」にする */
+                    .responsive-zigzag-row {
+                        flex-direction: column !important;
+                        gap: 24px !important;
+                    }
+                    .responsive-zigzag-row > div {
+                        flex: 1 1 100% !important;
+                        max-width: 100% !important;
+                    }
+                    /* 🌟 追加：携帯サイズになったら各URLグループを縦並びに変形 */
+                    .responsive-url-row {
+                        flex-direction: column !important;
+                        align-items: flex-start !important; /* スマホ時は左揃え */
+                        gap: 16px !important; /* テキストとすぐ真下のボタンの間の心地よい隙間 */
+                    }
+                    /* スマホ時はボタンの横幅を100%いっぱいに広げて押しやすくします */
+                    .responsive-url-row > a {
+                        width: 100% !important;
+                        max-width: 100% !important;
+                    }
+                    .responsive-camp-row {
+                        flex-direction: column !important;
+                        height: auto !important; /* ⭕ スマホ時は450pxの高さ制限を解除 */
+                        gap: 32px !important; 
+                    }
+                    /* スマホ時は 2:1 の制限を完全に解除し、画面幅に合わせて自動で縮小配置にします */
+                    .responsive-camp-row > div {
+                        flex: 1 1 auto !important;
+                        width: 100% !important;
+                        max-width: 450px !important; /* スマホ画面で横に広がりすぎない安心のロック */
+                        align-self: center !important;
+                    }
+                    /* スマホ時は画像の「高さ100%」の縛りを解き、横幅100%基準の自動可変に変形させます */
+                    .responsive-camp-row img {
+                        width: 100% !important;
+                        height: auto !important;
+                    }
+                    /* 🌟 追加：携帯サイズになったら作品リンクコーナーを縦並びに変形 */
+                    .responsive-nav-row {
+                        flex-direction: column !important;
+                        gap: 40px !important; /* スマホ時のprevカードとnextカードの間の隙間 */
+                    }
+                    /* スマホ時は半々の制限を完全に解除し、画面幅100%に広げます */
+                    .responsive-nav-row > a {
+                        flex: 1 1 100% !important;
+                        max-width: 100% !important;
+                    }
+                    /* 🌟 スマホ時のみ：右側（next）の文字も一律で「左寄せ」に揃えて視線を整流します */
+                    .responsive-nav-row > a:last-of-type > div {
+                        justify-content: flex-start !important;
+                    }
+
                 }
             `}</style>
 
@@ -98,7 +156,7 @@ export const WorkDetail: React.FC = () => {
                     <div style={styles.titleInnerBlock}>
                         <p style={styles.tag}>{work.tag}</p>
                         <h1 style={styles.workTitle}>{work.title}</h1>
-                        <p style={styles.range}>{work.range}</p>
+                        <p style={styles.roleText}>{work.role}</p>
                     </div>
                 </div>
             </div>
@@ -108,20 +166,34 @@ export const WorkDetail: React.FC = () => {
 
             {/* 紹介文 セクション */}
             <div  className="responsive-description-row" style={styles.descriptionContainer}>
-                <p style={styles.description}>
-                    setumeisetumeisetumeisetumeisetumeisetumeisetumeisetumeisetumeisetumeisetumeis
-                    setumeisetumeisetumeisetumeisetumeisetumeisetumeisetumeisetumeisetumeisetumeis
-                    setumeisetumeisetumeisetumeisetumeisetumeisetumeisetumeisetumeisetumeisetumeis
-                    setumeisetumeisetumeisetumeisetumeisetumeisetumeisetumeisetumeisetumeisetumeis
-                    setumeisetumeisetumeisetumeisetumeisetumeisetumeisetumeisetumeisetumeisetumeis
-                    setumeisetumeisetumeisetumeisetumeisetumeisetumeisetumeisetumeisetumeisetumeis
-                </p>
-                <div style={styles.buttonContainer}>
-                    <p style={styles.buttonDescription}>Reactで実装した動くデモサイト</p>
-                    <a href={work.demoUrl} target="_blank" rel="noreferrer" style={styles.demoLink}>
-                        View Site
-                    </a>
+                {/* 🌟 修正：説明文エリアの左側（または右側）の塊の中に配置します */}
+                <div style={styles.descriptionBlock}>
+                    
+                    {/* 🌟 新設：説明文の上に凛と佇む、詳細な案件名 */}
+                    {work.detailTitle && work.detailTitle !== "" && (
+                        <h3 style={styles.detailTitleText}>
+                            {work.detailTitle}
+                        </h3>
+                    )}
+
+                    {/* 🌟 既存：データから引っ張ってくる説明文（あなたの完璧なスタイルを100%維持） */}
+                    {work.description && work.description !== "" && (
+                        <p style={styles.description}>
+                            {work.description}
+                        </p>
+                    )}
+                    
                 </div>
+
+
+                {work.url.demo && work.url.demo !== "" && (
+                    <div style={styles.buttonContainer}>
+                        <p style={styles.buttonDescription}>Reactで実装した動くデモサイト</p>
+                        <a href={work.url.demo} target="_blank" rel="noreferrer" style={styles.demoLink}>
+                            View Site
+                        </a>
+                    </div>
+                )}
             </div>
 
             {/* 🌟 クラス名を付与。外枠の inline-style（subHeroWrapper）がスマホ時の邪魔をしないようにします */}
@@ -295,7 +367,7 @@ export const WorkDetail: React.FC = () => {
                         <h4 style={styles.outlineTitle}>コンセプトボード</h4>
                         <div style={styles.boardImageFrame}>
                             <img 
-                                src={work.concept.boardImage || "https://placeholder.com"} 
+                                src={work.concept.boardImage || "https://placehold.jp/1600x1200.png"} 
                                 alt="Concept Board" 
                                 style={styles.boardImage} 
                             />
@@ -320,7 +392,7 @@ export const WorkDetail: React.FC = () => {
                     </div>
                 </div>
 
-                            {/* 🌟 縦積みのグループコンテナ */}
+                {/* 🌟 縦積みのグループコンテナ */}
                 <div style={styles.outlineContainer}>
 
                     <div style={styles.outlineGroup}>
@@ -336,19 +408,220 @@ export const WorkDetail: React.FC = () => {
                 </div>
             </div>
 
-            {/* 成果物へのリンクボタン */}
-            <div>
-                <div style={styles.buttonContainer}>
-                    <p style={styles.buttonDescription}>デモサイトはこちら</p>
-                    <a href={work.demoUrl} target="_blank" rel="noreferrer" style={styles.demoLink}>
-                        View Site
-                    </a>
+            {/* 🌟 1. PROCESS & NOTES セクション */}
+            {work.process && work.process.length > 0 && (
+                <div style={styles.sectionContainer}>
+                    <div style={styles.sectionTitleContainer}>
+                        <p style={styles.sectionSubtitle}>制作錯誤</p>
+                        <div style={styles.titleWithLineFlex}>
+                            <h2 style={styles.sectionTitle}>PROCESS & NOTES</h2>
+                            <div style={styles.titleFlexLine} />
+                        </div>
+                    </div>
+
+                    <div style={styles.zigzagSectionWrapper}>
+                        {work.process.map((step, index) => (
+                            /* 🌟 共通のクラス名とスタイル名を利用 */
+                            <div 
+                                key={index} 
+                                className="responsive-zigzag-row"
+                                style={{
+                                    ...styles.zigzagRowGroup,
+                                    flexDirection: index % 2 === 0 ? 'row' as const : 'row-reverse' as const,
+                                }}
+                            >
+                                <div style={styles.zigzagTextBlock}>
+                                    <h3 style={styles.zigzagStepTitle}>{step.title}</h3>
+                                    <p style={styles.zigzagStepContent}>{step.description}</p>
+                                </div>
+                                <div style={styles.zigzagImageBlock}>
+                                    <img src={step.image　　 || "https://placehold.jp/1200x800.png"} alt={step.title} style={styles.zigzagImage} loading="lazy" />
+                                </div>
+                            </div>
+                        ))}
+                    </div>
                 </div>
-                <a href={work.figmaUrl} style={styles.figmaLink}>
-                    Figmaリンク
-                </a>
+            )}
+
+            {/* 🌟 2. POINT セクション */}
+            {work.point && work.point.length > 0 && (
+                <div style={styles.sectionContainer}>
+                    <div style={styles.sectionTitleContainer}>
+                        <p style={styles.sectionSubtitle}>こだわったポイント</p>
+                        <div style={styles.titleWithLineFlex}>
+                            <h2 style={styles.sectionTitle}>POINT</h2>
+                            <div style={styles.titleFlexLine} />
+                        </div>
+                    </div>
+
+                    <div style={styles.zigzagSectionWrapper}>
+                        {work.point.map((item, index) => (
+                            /* 🌟 まったく同じ共通のクラス名とスタイル名をそのまま再利用！ */
+                            <div 
+                                key={index} 
+                                className="responsive-zigzag-row"
+                                style={{
+                                    ...styles.zigzagRowGroup,
+                                    flexDirection: index % 2 === 0 ? 'row' as const : 'row-reverse' as const,
+                                }}
+                            >
+                                <div style={styles.zigzagTextBlock}>
+                                    <h3 style={styles.zigzagStepTitle}>{item.title}</h3>
+                                    <p style={styles.zigzagStepContent}>{item.description}</p>
+                                </div>
+                                <div style={styles.zigzagImageBlock}>
+                                    <img src={item.image　 || "https://placehold.jp/1200x800.png"} alt={item.title} style={styles.zigzagImage} loading="lazy" />
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
+
+
+            {/* URL セクション：データが存在する項目だけを表示 */}
+            {((work.url?.demo && work.url.demo !== "") || 
+              (work.url?.figma && work.url.figma !== "") || 
+              (work.url?.github && work.url.github !== "")) && (
+                <div style={styles.sectionContainer}>
+                    {/* タイトルエリア（制作データの形を完全にコピー） */}
+                    <div style={styles.sectionTitleContainer}>
+                        <p style={styles.sectionSubtitle}>関連リンク</p>
+                        <div style={styles.titleWithLineFlex}>
+                            <h2 style={styles.sectionTitle}>URL</h2>
+                            <div style={styles.titleFlexLine} />
+                        </div>
+                    </div>
+
+                    {/* 縦積みのグループコンテナ */}
+                    <div style={styles.outlineContainer}>
+
+                        {/* 1. デモサイト：データがある場合のみ出現 */}
+                        {work.url?.demo && work.url.demo !== "" && (
+                            <div className="responsive-url-row" style={styles.urlRowGroup}>
+                                <div style={styles.outlineGroup}>
+                                    <h4 style={styles.outlineTitle}>デモサイト</h4>
+                                    <p style={styles.outlineContent}>{work.url.demo}</p>
+                                </div>
+                                <a href={work.url.demo} target="_blank" rel="noreferrer" style={styles.urlLinkBtn}>
+                                    View Site
+                                </a>
+                            </div>
+                        )}
+
+                        {/* 2. Figma：データがある場合のみ出現 */}
+                        {work.url?.figma && work.url.figma !== "" && (
+                            <div className="responsive-url-row" style={styles.urlRowGroup}>
+                                <div style={styles.outlineGroup}>
+                                    <h4 style={styles.outlineTitle}>Figma</h4>
+                                    <p style={styles.outlineContent}>{work.url.figma}</p>
+                                </div>
+                                <a href={work.url.figma} target="_blank" rel="noreferrer" style={styles.urlLinkBtn}>
+                                    Open Figma
+                                </a>
+                            </div>
+                        )}
+
+                        {/* 3. GitHub：データがある場合のみ出現 */}
+                        {work.url?.github && work.url.github !== "" && (
+                            <div className="responsive-url-row" style={styles.urlRowGroup}>
+                                <div style={styles.outlineGroup}>
+                                    <h4 style={styles.outlineTitle}>GitHub</h4>
+                                    <p style={styles.outlineContent}>{work.url.github}</p>
+                                </div>
+                                <a href={work.url.github} target="_blank" rel="noreferrer" style={styles.urlLinkBtn}>
+                                    View Code
+                                </a>
+                            </div>
+                        )}
+
+                    </div>
+                </div>
+            )}
+
+            {/* 🌟 デザインカンプセクション（画面の端から端まで余白なく横断するチェック柄） */}
+            <div style={styles.campSectionWrapper}>
+                <div style={styles.campInnerContainer}>
+                    
+                    {/* メインエリア：PC時は横並び半々、携帯サイズ時は中央寄せ縦並びに可変 */}
+                    <div className="responsive-camp-row" style={styles.campMainRow}>
+                        
+                        {/* 左側：パソコン版のデザインカンプ（トリミングせずそのまま綺麗に縮小） */}
+                        <div style={styles.campImageBlockPC}>
+                            <img 
+                                src={work.image.designcampPC || "https://placehold.jp/1920x5000.png"} 
+                                alt="PC Design Camp" 
+                                style={styles.campImage} 
+                            />
+                        </div>
+
+                        {/* 右側：携帯版のデザインカンプ（トリミングせずそのまま綺麗に縮小） */}
+                        <div style={styles.campImageBlockSP}>
+                            <img 
+                                src={work.image.designcampMobile || "https://placehold.jp/1024x3000.png"} 
+                                alt="SP Design Camp" 
+                                style={styles.campImage} 
+                            />
+                        </div>
+
+                    </div>
+                </div>
             </div>
-            
+
+
+            {/* 🌟 修正：最初と最後を自動判別し、1つの時はど真ん中に配置するナビゲーション */}
+            <div style={styles.navSectionContainer}>
+                
+                <div className="responsive-nav-row" style={{
+                    ...styles.navMainRow,
+                    /* 💡【ここが最大の仕掛け！】
+                       もし「前の作品」か「次の作品」のどちらか片方しかない場合は、
+                       左右均等配置（space-between）ではなく、強制的に「画面のど真ん中（center）」に引き寄せます */
+                    justifyContent: (!prevWork || !nextWork) ? 'center' : 'space-between',
+                }}>
+                    
+                    {/* 👈 左側：前の作品（Prev）グループ：データが存在する場合のみ出力 */}
+                    {prevWork && (
+                        <Link to={`/works/${prevWork.id}`} style={styles.navCardLink}>
+                            <div style={styles.navCardHeaderLeft}>
+                                <span style={styles.arrowText}>← prev</span>
+                            </div>
+                            <div style={styles.navImageFrame}>
+                                <img src={prevWork.image.mainImage || "https://placehold.jp/512x288.png"} alt="Previous Work" style={styles.navImage} />
+                            </div>
+                        </Link>
+                    )}
+
+                    {/* 👉 右側：次の作品（Next）グループ：データが存在する場合のみ出力 */}
+                    {nextWork && (
+                        <Link to={`/works/${nextWork.id}`} style={styles.navCardLink}>
+                            <div style={{
+                                ...styles.navCardHeaderRight,
+                                /* 💡【ここが隠し味！】
+                                   もし最初の作品で「next →」が1つだけでど真ん中に来た時は、
+                                   文字が右端にあると不格好なので、文字も一緒に左端（通常位置）に揃えます */
+                                justifyContent: !prevWork ? 'flex-start' : 'flex-end',
+                            }}>
+                                <span style={styles.arrowText}>next →</span>
+                            </div>
+                            <div style={styles.navImageFrame}>
+                                <img src={nextWork.image.mainImage || "https://placehold.jp/512x288.png"} alt="Next Work" style={styles.navImage} />
+                            </div>
+                        </Link>
+                    )}
+
+                </div>
+
+                {/* 下部ど真ん中：All works ボタン（変更なし） */}
+                <div style={styles.allWorksBtnWrapper}>
+                    <Link to="/works" style={styles.allWorksBtn}>
+                        All Works
+                    </Link>
+                </div>
+
+            </div>
+
+
         </div>
     );
 };
@@ -435,6 +708,12 @@ const styles= {
         letterSpacing: '0.05em',
     },
     workSubtitle: {},
+    roleText: {
+        //fontSize: '13px',
+        color: '#F49961',
+        margin: 0,
+        letterSpacing: '0.05em',
+    },
     tag: {
         width: '100%',
         height: '100%',
@@ -443,7 +722,6 @@ const styles= {
         whiteSpace: 'nowrap' as const, // 🌟追加：タグ内の文字（プロジェクト等）を絶対改行しない
         flexShrink: 0, // 🌟追加：画面が狭くなってもタグ自体が潰れて小さくならないように固定
     },
-    range: {},
     herosectionContainer: {
         width: '100%',
         maxWidth: '1200px',
@@ -468,24 +746,40 @@ const styles= {
         flexWrap: 'wrap' as const,
         boxSizing: 'border-box' as const,
     },
-    // 🌟 修正：画面幅に合わせて自動で「勝手に改行」して収まる説明文スタイル
+    // 🌟 新設：詳細タイトルと説明文を縦にきれいに並べ、PC時に横幅の50%で縮ませるための親の箱
+    descriptionBlock: {
+        flex: '0 0 calc(50% - 20px)',
+        width: '100%',
+        minWidth: '320px',
+        display: 'flex',
+        flexDirection: 'column' as const,
+        gap: '14px',                       // 🌟 詳細タイトルと説明文の間の細かな心地よい隙間
+        alignSelf: 'center' as const,
+        boxSizing: 'border-box' as const,
+    },
+
+    // 🌟 新設：説明文の上に載せる詳細な案件名のデザインルール
+    detailTitleText: {
+        fontSize: '18px',                  // 説明文（15px）より一回り大きくして視認性を確保
+        fontWeight: 'bold',
+        color: '#4599C4',                  // 意思を感じるシックな黒
+        margin: 0,
+        lineHeight: '1.4',
+        textAlign: 'left' as const,
+        letterSpacing: '0.03em',
+        wordBreak: 'break-word' as const,  // ⭕ 長い名前が来ても絶対に右端を突き破らないお守り
+    },
+
+    // 🌟 修正：あなたの完璧な設定から、横幅を制御するflex関連のみを上の親箱（descriptionBlock）へお引越しさせました
     description: {
         color: '#4E4E4E',
         fontSize: '15px',
         lineHeight: '1.8',
         margin: 0,
-        
-        // PC時は横幅の50%（半分）を維持して縮みます
-        flex: '0 0 calc(50% - 20px)',
         width: '100%',
-        minWidth: '320px',
-        
-        // 🌟【最重要】文章が枠幅に合わせて「勝手に改行」して収まるための設定
-        whiteSpace: 'normal' as const,       // ⭕ 文字列を枠の右端で自然に折り返す指示
-        wordBreak: 'break-word' as const,   // ⭕ 英語の長文やsetumei...といった連続した文字でも、枠を突き破らずに自動改行させる指示
-        
+        whiteSpace: 'normal' as const,       
+        wordBreak: 'break-word' as const,   
         textAlign: 'left' as const, 
-        alignSelf: 'center' as const, 
         boxSizing: 'border-box' as const,
     },
     // 🌟 右側：デモボタンのコンテナ（通常時：横幅を完全に半々の 1:1 にロックするルール）
@@ -742,6 +1036,89 @@ const styles= {
         visibility: 'hidden' as const,
         transition: 'opacity 0.2s ease, transform 0.2s ease', 
     },
+
+    // 🌟 統合：ジグザグレイアウト用の共通スタイル一式
+    zigzagSectionWrapper: {
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column' as const,
+        gap: '100px', // グループ同士の間のゆったりとした隙間
+        marginTop: '40px',
+        boxSizing: 'border-box' as const,
+    },
+    zigzagRowGroup: {
+        display: 'flex',
+        width: '100%',
+        justifyContent: 'space-between',
+        alignItems: 'center' as const,
+        gap: '60px',
+        boxSizing: 'border-box' as const,
+    },
+    zigzagTextBlock: {
+        flex: '0 0 calc(50% - 30px)',
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column' as const,
+        gap: '12px',
+        boxSizing: 'border-box' as const,
+    },
+    zigzagStepTitle: {
+        fontFamily: 'Hepta Slab, sans-serif',
+        fontSize: '22px',
+        fontWeight: 'bold',
+        color: '#F49961',
+        margin: 0,
+        letterSpacing: '0.05em',
+    },
+    zigzagStepContent: {
+        fontSize: '15px',
+        lineHeight: '1.8',
+        color: '#4E4E4E',
+        margin: 0,
+        textAlign: 'left' as const,
+        whiteSpace: 'normal' as const,
+        wordBreak: 'break-word' as const,
+    },
+    zigzagImageBlock: {
+        flex: '0 0 calc(50% - 30px)',
+        width: '100%',
+        boxSizing: 'border-box' as const,
+    },
+    zigzagImage: {
+        width: '100%',
+        height: 'auto',
+        display: 'block' as const,
+        borderRadius: '12px',
+        boxShadow: '0 4px 20px rgba(0,0,0,0.04), inset 0 0 0 1px rgba(0,0,0,0.06)',
+    },
+
+    urlRowGroup: {
+        display: 'flex',
+        flexDirection: 'row' as const,
+        justifyContent: 'space-between',
+        alignItems: 'center' as const, // ⭕ ボタンと左のテキストの高さを中央で完璧に揃える
+        width: '100%',
+        boxSizing: 'border-box' as const,
+    },
+    // 🌟 新設：洗練されたブランドカラーのリンクボタンデザイン
+    urlLinkBtn: {
+        fontFamily: 'Hepta Slab',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '180px',           // ボタンのスマートな横幅
+        height: '45px',           // カラーやフォントのカプセルと揃えた黄金比の45px
+        backgroundColor: '#F49961', // ブランドカラーのオレンジ
+        color: '#ffffff',
+        fontWeight: 'bold',
+        textDecoration: 'none',   // 下線を消す
+        borderRadius: '23px',     // 完全な丸型カプセル
+        fontSize: '14px',
+        letterSpacing: '0.05em',
+        transition: 'background-color 0.3s ease, opacity 0.3s ease',
+        boxSizing: 'border-box' as const,
+        flexShrink: 0,            // ボタンが潰れるのを防止
+    },
     demoLink: {
         width: '300px',
         height: '80px',
@@ -757,5 +1134,189 @@ const styles= {
         letterSpacing: '0.05em',
         transition: 'background-color 0.3s ease',
     },
-    figmaLink: {},
+
+    campSectionWrapper: {
+        width: '100vw',               // ⭕ 親を無視してブラウザ画面の横幅100%いっぱいに広げる
+        marginLeft: 'calc(-50vw + 50%)', // ⭕ 【最重要】画面の左端まで強制的に引っ張る計算式
+        marginRight: 'calc(-50vw + 50%)',// ⭕ 【最重要】画面の右端まで強制的に引っ張る計算式
+        marginTop: '150px',
+        marginBottom: '150px',
+        padding: '80px 20px',          // 🌟 上下の余白を少し贅沢に広げてカンプの特別感を演出
+        backgroundImage: `
+            linear-gradient(to right, #C4E9F2 1px, transparent 1px),
+            linear-gradient(to bottom, #C4E9F2 1px, transparent 1px)
+        `,
+        backgroundSize: '50px 50px',   // ABOUTセクションと完全にシンクロするマスの大きさ
+        backgroundColor: 'transparent',
+        boxSizing: 'border-box' as const,
+    },
+    
+    // 内側の最大幅コンテナ：ABOUTやお持ちの1200pxラインにピシッと合わせる枠
+    campInnerContainer: {
+        width: '100%',
+        maxWidth: '1200px',
+        margin: '0 auto',
+        boxSizing: 'border-box' as const,
+        display: 'flex',
+        flexDirection: 'column' as const,
+    },
+    
+    // 🌟 PC時の横並び・上下ど真ん中揃えを設定するレール
+    campMainRow: {
+        display: 'flex',
+        flexDirection: 'row' as const,
+        justifyContent: 'center', 
+        
+        // ⭕【最重要】ここにカンプを表示させたい「高さ」の限界線を指定します
+        // 450pxの中に2枚の画像が上下余白なくジャストサイズで収まるようになります（お好みで 500px 等に変更可）
+        height: 'auto', 
+        
+        gap: '40px', // カンプ同士の横のすっきりとした隙間
+        width: '100%',
+        boxSizing: 'border-box' as const,
+    },
+    
+    // パソコン版・携帯版の各画像を包む、横幅を完璧に1:1（半々）にするための箱
+    campImageBlockPC: {
+        height: '100%',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        boxSizing: 'border-box' as const,
+        
+        // ⭕【ここが最大の仕掛け】
+        // 全体の幅配分を「2（広く取る）」に完全強制ロックするTypeScript専用の厳格な記述です
+        flex: '2 1 0%' as const, 
+    },
+    campImageBlockSP: {
+        height: '100%',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        boxSizing: 'border-box' as const,
+        
+        // ⭕【ここが最大の仕掛け】
+        // 全体の幅配分を「1（スマートに取る）」に完全強制ロックするTypeScript専用の厳格な記述です
+        flex: '1 1 0%' as const, 
+    },
+
+    // 🌟 以前大成功した、アスペクト比を崩さず絶対に切り取らずにそのまま綺麗に縮小する画像ルール
+    campImage: {
+        // ⭕【ここが最大のキモ！】
+        // 横幅（width）をあえて auto にし、高さ（height）を「100%」に完全強制ロックします！
+        // これにより、左右の画像が親の450pxという高さにピタッと吸い付き、1ミリの狂いもなく高さが一直線に揃います
+        width: 'auto',
+        height: '100%',
+        
+        maxWidth: '100%',
+        objectFit: 'contain' as const, // 左右が切り取られるのを100%防御
+        borderRadius: '12px',          
+        boxShadow: '0 10px 30px rgba(0,0,0,0.08)', 
+        boxSizing: 'border-box' as const,
+    },
+        
+    // ナビゲーションセクション全体の包み箱
+    navSectionContainer: {
+        width: '100%',
+        maxWidth: '1200px',
+        margin: '100px auto 100px auto',
+        display: 'flex',
+        flexDirection: 'column' as const,
+        gap: '60px', // 上のカード群と下のAll worksボタンの間の隙間
+        boxSizing: 'border-box' as const,
+    },
+    
+    // 左右のカードを横並びにするレール
+    navMainRow: {
+        display: 'flex',
+        flexDirection: 'row' as const,
+        justifyContent: 'space-between',
+        alignItems: 'flex-start' as const,
+        gap: '40px', // 左右カードの間の心地よい隙間
+        width: '100%',
+        boxSizing: 'border-box' as const,
+    },
+    
+    // 🌟 グループ全体を1つの大きなリンクボタンにするためのカード設定
+    navCardLink: {
+        flex: '0 0 calc(50% - 20px)', // PC時は完璧な 1 : 1（半々）に固定
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column' as const,
+        gap: '12px',                  // 文字とすぐ下の画像の間の細かな隙間
+        textDecoration: 'none',       // リンクの下線を消す
+        boxSizing: 'border-box' as const,
+        cursor: 'pointer',
+    },
+    
+    // 👈 左のカード用：文字を「一番左端」に寄せるヘッダー
+    navCardHeaderLeft: {
+        width: '100%',
+        display: 'flex',
+        justifyContent: 'flex-start', // 左寄せ
+    },
+    
+    // 👉 右のカード用：文字を「一番右端」に寄せるヘッダー
+    navCardHeaderRight: {
+        width: '100%',
+        display: 'flex',
+        justifyContent: 'flex-end',   // 右寄せ
+    },
+    
+    // 矢印テキスト単体のスタイル（装飾なし・文字だけ・いつもの青色）
+    arrowText: {
+        fontFamily: 'Hepta Slab, sans-serif',
+        fontSize: '15px',
+        fontWeight: 'bold',
+        color: '#4599C4', // いつもの青色
+        margin: 0,
+        letterSpacing: '0.05em',
+    },
+    
+    // カード内の画像を包むフレーム
+    navImageFrame: {
+        width: '100%',
+        borderRadius: '12px', // 他のセクションと揃えた美しい角丸
+        overflow: 'hidden' as const,
+        boxShadow: '0 4px 20px rgba(0,0,0,0.03), inset 0 0 0 1px rgba(0,0,0,0.06)',
+        backgroundColor: '#ffffff',
+    },
+    
+    // 画像自体（アスペクト比を保って100%きれいにフィット縮小）
+    navImage: {
+        width: '100%',
+        height: 'auto',
+        display: 'block' as const,
+        transition: 'transform 0.3s ease', // マウスを乗せた時にフワッと動かす予備線
+    },
+    
+    // 下部：ボタンを中央配置にするためのラッパー
+    allWorksBtnWrapper: {
+        width: '100%',
+        display: 'flex',
+        justifyContent: 'center', // ⭕ ど真ん中に配置
+        alignItems: 'center',
+    },
+    
+    allWorksBtn: {
+        fontFamily: 'Hepta Slab',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '200px',    
+        height: '60px',  
+        backgroundColor: '#ffffff',
+        color: '#4599C4',           
+        fontSize: '15px',
+        letterSpacing: '0.05em',
+        textDecoration: 'none',
+        borderRadius: '30px',       // カプセル型
+        
+        // ⭕ 【最重要】ご指定通りの「3pxの青い太枠」を完全再現
+        border: '3px solid #4599C4', 
+        
+        boxSizing: 'border-box' as const,
+        transition: 'background-color 0.3s ease, color 0.3s ease',
+    }
+
 };

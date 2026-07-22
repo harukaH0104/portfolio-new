@@ -4,7 +4,7 @@ import { worksData } from "../data/worksData";
 
 export const Home: React.FC = () => {
     // 🌟全件ではなく、4つに切り出したデータをループに使用
-    const featuredWorks = worksData.slice(0, 4);
+    const featuredWorks = worksData.slice(1, 5);
 
     // 現在のスライド位置（0 = 1枚目, 1 = 2枚目, 2 = 3枚目）
     const [activeSlide, setActiveSlide] = useState(0);
@@ -55,7 +55,49 @@ export const Home: React.FC = () => {
         <div style={styles.pageRoot}>
 
             <style>{`
+                /* =========================================================
+                🌟 ヒーローセクション：左端固定の雲もくもくアニメーション
+                ========================================================= */
+                @keyframes leftCloudMoku {
+                    0% {
+                        /* 最初の状態：元の位置 */
+                        transform: scale(1) translateY(0px) rotate(0deg);
+                    }
+                    50% {
+                        /* 15秒後の状態：ほんのり少しだけ大きくし、上へ浮かせ、わずかに傾けます */
+                        /* これにより、画像の位置は左端に固定されたまま、生き物のようにその場でもくもく動きます */
+                        transform: scale(1.05) translateY(-8px) rotate(1.5deg);
+                    }
+                    100% {
+                        /* 30秒かけて元の状態に戻ります */
+                        transform: scale(1) translateY(0px) rotate(0deg);
+                    }
+                }
+
+                .moving-cloud-single {
+                    /* ⭕ もくもくアニメーションを30秒かけて、ゆったりと永久に無限ループさせます */
+                    animation: leftCloudMoku 30s ease-in-out infinite;
+                    
+                     
+                }
+             
+             
+
                 @media (max-width: 768px) {
+                    /* 1. ど真ん中の四角形を、タイトルとサブタイトルの真ん中（やや上方）に引き上げる */
+                    .hero-center-square {
+                        top: '35%' !important; /* ⭕ 縦長画面では、文字の塊の中心に吸い付くように上にスライド */
+                        width: 320px !important; /* スマホ画面からはみ出さないスリムサイズに縮小 */
+                        height: 320px !important;
+                        border-radius: 24px !important;
+                    }
+
+                    /* 2. 星（stars）の写真を、タイトルの「一番上（斜め上）」に移動して可愛く整流 */
+                    .hero-stars-photo {
+                        top: -30px !important; 
+                        right: 50px !important;   
+                        width: 70px !important;  /* スマホの画面に合わせて、星のサイズをひと回り繊細に縮小 */
+                    }
                     .responsive-work-card { width: 100% !important; max-width: 500px !important; }
                     .responsive-sub-photo-row {
                         display: flex !important;
@@ -87,6 +129,7 @@ export const Home: React.FC = () => {
 
             {/* 1. HERO セクション */}
             <div style={styles.heroSection}>
+
                 <div style={styles.heroInner}>
                     <h1 style={styles.heroTitle}>
                         HOSONO<br />
@@ -97,8 +140,32 @@ export const Home: React.FC = () => {
                         あなたがまだ気づいていない想いを見つけ、<br />
                         ユーザーが使いやすい「最高の体験」へと翻訳する。
                     </p>
+
+                    {/* 🌟 追加[2]：タイトルの横あたりに設置する星（stars）の写真 */}
+                    <div className="hero-stars-photo" style={styles.starsImageWrapper}>
+                        <img 
+                            src="/top/stars.png"
+                            alt="stars" 
+                            style={styles.starsImg} 
+                        />
+                    </div>
                 </div>
+
+                {/* 🌟 左端寄せでその場でもくもく動く、1枚の雲画像 */}
+                <div className="moving-cloud-single" style={styles.cloudLeftWrapper}>
+                    <img 
+                        src="/top/cloud.png"
+                        alt="cloud" 
+                        style={styles.cloudImg} 
+                    />
+                </div>
+
+                {/* 🌟 追加[1]：ど真ん中に配置する角丸の四角形（背景写真） */}
+                <div className="hero-center-square" style={styles.centerSquareCard} />
+
             </div>
+
+            
 
             {/* 2. WORKS セクション（メイン注目作品） */}
             <div style={styles.sectionContainer}>
@@ -123,7 +190,7 @@ export const Home: React.FC = () => {
                                 <div style={styles.categoryTag}>プロジェクト</div>
                                 <p style={styles.workTitle}>ホテル「uni」</p>
                             </div>
-                            <p style={styles.workRange}>コンセプト設計 / ロゴデザイン / UI・UXデザイン / Reactコーディング</p>
+                            <p style={styles.workRole}>コンセプト設計 / ロゴデザイン / UI・UXデザイン / Reactコーディング</p>
                             <p style={styles.workDescription}>
                                 setumeisetumeisetumeisetumeisetumeisetumeisetumeisetumeisetumeisetumeisetumeisetumeisetumeisetumei
                                 setumeisetumeisetumeisetumeisetumeisetumeisetumei
@@ -135,8 +202,8 @@ export const Home: React.FC = () => {
                         </div>
                     </div>
 
-                                            {/* 【下段】サブの写真3枚（1枚目消失バグ・完全修正版） */}
-                                            <div 
+                        {/* 【下段】サブの写真3枚（1枚目消失バグ・完全修正版） */}
+                        <div 
                             ref={sliderRef}
                             className="responsive-sub-photo-row" 
                             style={styles.featuredSubPhotoRow}
@@ -204,7 +271,7 @@ export const Home: React.FC = () => {
                                 <h3 style={styles.workTitle}>{work.title}</h3>
                             </div>
                             {/* 担当範囲 */}
-                            <p style={styles.workRange}>{work.range}</p>
+                            <p style={styles.workRole}>{work.role}</p>
                         </Link>
                     ))}
                 </div>   
@@ -270,13 +337,14 @@ const styles = {
     // --- HERO SECTION ---
     heroSection: {
         width: '100%',
-        marginTop: '200px',
+        marginTop: '100px',
         boxSizing: 'border-box' as const,
+        position: 'relative' as const,
     },
     heroInner: {
         width: '100%',
         maxWidth: '1200px',
-        margin: '0 auto 200px auto',
+        margin: '0 auto 300px auto',
         display: 'flex',
         flexDirection: 'column' as const,
     },
@@ -285,17 +353,86 @@ const styles = {
         fontSize: 'clamp(44px, 6.5vw, 96px)',
         fontWeight: '800',
         letterSpacing: '0.1em',
-        margin: '0 0 30px 0',
+        //margin: '0 0 30px 0',
         alignSelf: 'flex-start' as const,
+        zIndex: 3,
     },
     heroSubtitle: {
         fontSize: 'clamp(14px, 1.8vw, 24px)',
         color: '#4599C4',
         lineHeight: '1.8',
         letterSpacing: '0.05em',
-        margin: '0 0 50px 0',
+        margin: '150px 0 150px 0',
         alignSelf: 'flex-end' as const,
         textAlign: 'right' as const,
+        zIndex: 3,
+    },
+
+    // 🌟 新設：ヒーローのど真ん中に設置する角丸の四角形（動かない写真・背景）
+    centerSquareCard: {
+        position: 'absolute' as const,
+        
+        // ⭕ 【上下左右ど真ん中寄せの黄金比】
+        top: '35%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)', // 自身のサイズ分を戻して完璧なセンターへ
+        
+        // ⭕ PC大画面時のサイズ（デザインに合わせて自由に変えてください）
+        width: '700px',
+        height: '700px',
+        
+        borderRadius: '40px',               // 優しいしっかりめの角丸
+        backgroundColor: '#ffffff',         // 写真を当てる前のベース（画像にする場合は以下を有効化）
+        
+        backgroundImage: 'url(/top/square-bg.jpg)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        
+        boxShadow: '0 20px 50px rgba(0,0,0,0.03)', // 上品な沈み込み影
+        zIndex: 1,                          // ⭕ 雲（zIndex:1）より手前、文字（zIndex:3）より後ろ
+        boxSizing: 'border-box' as const,
+        transition: 'all 0.5s ease',        // 画面が縮む時の滑らかな移動用
+    },
+
+    // 🌟 新設：タイトルの横あたりに設置する星（stars）の外枠
+    starsImageWrapper: {
+        position: 'absolute' as const,
+        
+        // ⭕ PC時はタイトルの横あたり（例：右側や斜め上など）に絶対配置で固定
+        top: '10px',
+        right: '50px', // 💡 タイトル「WORKS」などの文字が終わる右横あたりにジャストで合わせます
+        
+        width: '120px',  // PC時の星の写真のサイズ
+        height: 'auto',
+        zIndex: 2,       // 一番手前
+        boxSizing: 'border-box' as const,
+    },
+    // 星の写真自体（歪み防止）
+    starsImg: {
+        width: '100%',
+        height: 'auto',
+        display: 'block' as const,
+        objectFit: 'contain' as const,
+    },
+
+    // 🌟 新設：雲の画像を「左端」に完全に固定する外枠
+    cloudLeftWrapper: {
+        position: 'absolute' as const,
+        top: '50%',
+        left: '-60px', 
+        transformOrigin: 'left center',
+        width: 'clamp(250px, 35vw, 450px)', // 🌟 パソコンでは大きく、スマホでは勝手に程よく縮む可変の横幅
+        aspectRatio: '4 / 3',   // お使いの雲画像の縦横比に合わせて自由に調整してください
+        zIndex: 2,              // コンテンツ（キャッチコピー）の背後に潜り込ませる
+        boxSizing: 'border-box' as const,
+    },
+    
+    // 🌟 新設：雲画像自体のルール（絶対に歪ませず、枠いっぱいにフィットさせる）
+    cloudImg: {
+        width: '100%',
+        height: '100%',
+        objectFit: 'contain' as const, // ⭕ 画像の端っこが切り取られるのを100%防止
+        display: 'block' as const,
     },
 
     // --- GENERAL SECTIONS (WORKS / ABOUT) ---
@@ -493,7 +630,7 @@ const styles = {
         overflow: 'hidden' as const,    // 🌟お好みで追加：画面を突き破る場合に三点リーダーにする設定
         textOverflow: 'ellipsis' as const,
     },
-    workRange: {
+    workRole: {
         fontSize: '13px',
         color: '#F49961',
         margin: 0,
