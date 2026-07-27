@@ -67,7 +67,7 @@ export const worksData: Work[] = [
     concept: {
         main_concept: "余白と、静寂と。自分本来の純度に戻る旅",
         design_image: "a",
-        font: "Hepta Slab / Zen maru Gothic",
+        font: "cormorant Garamond / ssnoto serif JP",
         colors: ["#4599C4", "#F49961", "#FFF8E1", "#4E4E4E"] ,
         boardImage: "",
     },
@@ -116,7 +116,7 @@ export const worksData: Work[] = [
         designcampMobile: "",
     },
     url: {
-        demo: "https://portfolio-harukahosono.vercel.app",
+        demo: "https://uni-resort-site.vercel.app",
         figma: "string",
         github: "string",
     }
