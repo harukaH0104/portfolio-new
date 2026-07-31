@@ -362,7 +362,7 @@ const styles = {
         color: '#4599C4',
         lineHeight: '1.8',
         letterSpacing: '0.05em',
-        margin: '150px 0 150px 0',
+        margin: '500px 0 150px 0',
         alignSelf: 'flex-end' as const,
         textAlign: 'right' as const,
         zIndex: 3,
@@ -384,7 +384,7 @@ const styles = {
         borderRadius: '40px',               // 優しいしっかりめの角丸
         backgroundColor: '#ffffff',         // 写真を当てる前のベース（画像にする場合は以下を有効化）
         
-        backgroundImage: 'url(/top/square-bg.jpg)',
+        backgroundImage: 'url(/top/top.jpg)',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         
@@ -795,5 +795,8 @@ const styles = {
         alignSelf: 'center' as const,
         borderRadius: '50%',
         backgroundColor: '#ffffff',
+        backgroundImage: 'url(/top/top.about.jpg)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
     },
 };
